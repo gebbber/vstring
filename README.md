@@ -44,19 +44,19 @@ vstring.handle('verify-email', (req, res, next)=>{
 ```
 ...and that's it! (I know you won't forget to `app.listen()`!)
 
-Obviously, you can use verification strings for several purposes, specifying a different `action` for each, and provide a respective handler function.
+Obviously, you can use verification strings for several purposes, specifying a different `action` for each, and provide a respective handler function for each action.
 - The strings can have whatever parameters you'll need in your handler
-- The strings are all mounted at the same place, simplifying your routing table.
+- The strings are all mounted at the same place, keeping your routing clean.
 
 There are some bells and whistles you might want to be aware of...
 
 ---
-# API Details
-## Configuration Options: `vstring.use({...options})`
+## API - Setting Configuration Options
+## `vstring.use(options)`
 `vstring.use` sets any configuration option, or multiple at once. The following are available options, and each also has helper functions to set them more conveniently; examples shown below.
 
 ---
-## `options.bytes = 32`
+### `options.bytes = 32`
 Number of bytes to use for the string. Default is `32`, producing a 64-digit hexadecimal string. Recommended not to change.
 
 Examples:
@@ -67,14 +67,12 @@ vstring.bytes(32);
 ```
 
 ---
-## `options.ttl = 3600000`
+### `options.ttl = 3600000`
 Default expiry for new strings. Default is `3600000` milliseconds (1 hour). Many convenient ways to set it; all of the following give 90 minutes:
 
 ```javascript
 vstring.use({ttl: 90*60*1000}); // in millseconds only
-```
-Lots of helper functions for this one. The following all set default TTL to 90 minutes. Running any of these functions without arguments will set default TTL back to 1 hour:
-```javascript
+
 vstring.ttl({hours: 1, minutes: 30});
 
 vstring.millisecs(5400000); 
@@ -85,35 +83,15 @@ vstring.days(0.0625);
 vstring.weeks(0.0089); // (approximate)
 ```
 
-Note that the above setting just sets the *default* TTL for *new* strings. It does not affect existing strings that have already been generated and stored in a database, and it is overriden by any TTL arguments passed directly to `vstring.new` when creating a new verification string:
+Note that this setting just sets the *default* TTL for *new* strings. It does not affect existing strings that have already been generated and stored in a database, and it is overriden by any TTL arguments that are passed directly to `vstring.new` when creating a new verification string:
 
 ```javascript
-vstring.minutes(90); // default 90 minutes
-const {string} = vstring.new({weeks: 1}); // this string will be valid for one week
-```
-(the above call to `vstring.new` also requires an `action` string, but it has been omitted here for clarity)
-
----
-## `options.path = '/vstring'`
-
-Sets the default mount path; only has an effect when called before `vstring.install(app)`.
-
-The default mount path of `/vstring` would catch verification strings directed to:
-```javascript
-`http://${hostname}/vstring/${verificationString}`
-```
-The path can be set with either of the following:
-```javascript
-vstring.use({path: '/verify-string'});
-vstring.path('/verify-string');
-```
-**Or**, skip setting this and pass a `path` directly into `vstring.install()` when adding it to the Express stack:
-```javascript
-vstring.install(app, '/verify-string');
+vstring.minutes(90); // set default to 90 minutes
+const {string} = vstring.new({action, weeks: 1}); // override the default when generating the string
 ```
 
 ---
-## `options.method = "GET"`
+### `options.method = "GET"`
 
 **TL;dr: you probably don't need this.**
 
@@ -123,7 +101,7 @@ Sets the HTTP method to catch the verification string at. Multiple HTTP methods 
 
 
 ---
-# Generating Verification Strings: `vstring.new`
+## Generating Verification Strings
 ## `const {string, expires} = vstring.new({action, vparams, ...})`
 In your routes, when a verification string is needed to confirm an action, use `vstring.new` to generate the string, and then email it (or whatever) to the user.
 
@@ -147,10 +125,10 @@ const link = `http://${req.hostname}/vstring/${string}/remaining-url`;
 ```
 The end of the URL `/remaining-url` will be passed to the handler function as `req.url` and can be used for redirect, etc.
 - Note: The handler does *not* automatically redirect; it's up to you to decide what to do with the request.
-- **Warning**: Since the link is given to the user, and any value in `/remaining-url` may have been tampered with and should not be trusted other than for simple redirection.
+- **Warning**: Since the link is given to the user, any value in `/remaining-url` may have been tampered with and should not be trusted other than for simple redirection.
 
 ---
-# API - Handlers
+# API - Handler Functions
 A handler needs to be registered to handle each `action`. Generating a string with an `action` that does not have an installed handler will throw an error.
 
 ```javascript
