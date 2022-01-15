@@ -128,22 +128,19 @@ function handle(action, handler) {
 }
 
 // The Grande Finale...
-function intercept(path, app) {
+ function intercept(path, app) {
 
     if (!path) throw new Error('');
-
-    db.init().then(()=>{}).catch((err)=>{throw err;});
-    db.flushExpired(Date.now()).then(()=>{}).catch(()=>{});
-
+    
     app.use(path, async (req, res, next) => {
         
         if (!config.method.toUpperCase().split(' ').includes(req.method.toUpperCase())) return next();
-
+        
         const splitUrl = req.url.split('/')
         splitUrl.shift();
         const vString = splitUrl.shift();
         const found = await lookUp(vString);
-        console.log(found);
+        
         if (!found) return next(); // silently proceed
         const {_id, action, params} = found;
         
@@ -153,9 +150,18 @@ function intercept(path, app) {
         const result = handlers[action](req, res, next);
         
         const keepString = (result && result.then) ? await result : result;
-
+        
         if (!keepString) deleteString(_id);
         
     });
+
+    db.init()
+    .then(()=>{
+        db.flushExpired(Date.now());
+    })
+    .catch(err=>{
+        throw err;
+    })
+    
 
 }
