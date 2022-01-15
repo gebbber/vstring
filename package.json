@@ -6,6 +6,10 @@
   "scripts": {
     "test": "node ./test/index.js"
   },
+  "respository": {
+    "type": "git",
+    "url": "https://github.com/gebbber/vstring.git"
+  },
   "author": "Gregory Everett Brandon",
   "license": "MIT",
   "devDependencies": {
