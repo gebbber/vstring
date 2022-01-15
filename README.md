@@ -1,12 +1,12 @@
-# vstring v0.0.1
+# vstring-express v0.0.1
 
 ### Simple verification string management for Express.
 
 ---
 ## Quick Start:
-1. Require `'vstring'` and initialize it near the beginning of your Express stack:
+1. Require `'vstring-express'` and initialize it near the beginning of your Express stack:
 ```javascript
-const vstring = require('vstring');
+const vstring = require('vstring-express');
 
 const app = express();
 
