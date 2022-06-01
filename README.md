@@ -42,7 +42,7 @@ vstring.handle('verify-email', (req, res, next)=>{
 
 })
 ```
-...and that's it! (I know you won't forget to `app.listen()`!)
+...and that's it!
 
 Obviously, you can use verification strings for several purposes, specifying a different `action` for each, and provide a respective handler function for each action.
 - The strings can have whatever parameters you'll need in your handler
