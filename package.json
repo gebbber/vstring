@@ -1,18 +1,18 @@
 {
-  "name": "vstring-express",
-  "version": "0.0.2",
-  "description": "Simple Verification String Management for Express",
-  "main": "./src/index.js",
-  "scripts": {
-    "test": "node ./test/index.js"
-  },
-  "respository": {
-    "type": "git",
-    "url": "https://github.com/gebbber/vstring.git"
-  },
-  "author": "Gregory Everett Brandon",
-  "license": "MIT",
-  "devDependencies": {
-    "express": "^4.17.2"
-  }
+    "name": "vstring-express",
+    "version": "0.0.2",
+    "description": "Simple Verification String Management for Express",
+    "main": "./index.js",
+    "scripts": {
+        "demo": "node ./demo.js"
+    },
+    "respository": {
+        "type": "git",
+        "url": "https://github.com/gebbber/vstring.git"
+    },
+    "author": "Gregory Everett Brandon",
+    "license": "MIT",
+    "devDependencies": {
+        "express": "^4.17.2"
+    }
 }
