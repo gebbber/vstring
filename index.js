@@ -47,7 +47,7 @@ module.exports = class VString {
         const { _id, action, payload } = found;
         const handler = this.#handlers[action];
 
-        req.vstring = JSON.parse(payload);
+        req.vparams = JSON.parse(payload);
         let result = handler(req, res, next);
         if (result.then) result = await result;
 
