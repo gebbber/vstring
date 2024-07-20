@@ -1,13 +1,13 @@
 const db = {};
 
-async function save(_id, action, expires, params) {
-    db[_id] = { action, params, expires };
+async function save(_id, action, expires, payload) {
+    db[_id] = { action, payload, expires };
 }
 
 async function findById(_id) {
     const data = db[_id];
     if (!data) return null;
-    return { ...db, _id };
+    return { ...data, _id };
 }
 
 async function findByIdAndDelete(_id) {
@@ -19,4 +19,8 @@ async function flushExpired() {
     for (const id in db) if (db[id].expires < now) delete db[id];
 }
 
-module.exports = { flushExpired, save, findById, findByIdAndDelete };
+function init() {
+    setInterval(flushExpired, 1000 * 60 * 60);
+}
+
+module.exports = { init, flushExpired, save, findById, findByIdAndDelete };
