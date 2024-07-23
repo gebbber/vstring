@@ -6,7 +6,6 @@ module.exports = class VString {
 
     constructor({ store }) {
         this.#store = store || require('./memory-store.js');
-        if (this.#store.init) this.#store.init();
     }
 
     async newString({ action, ttl, ...rest }) {
