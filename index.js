@@ -44,10 +44,10 @@ module.exports = class VString {
         const found = await this.lookUp(vString);
         if (!found) return res.status(404).send({ message: 'Verification string not found' });
 
-        const { _id, action, payload } = found;
+        const { _id, action, params } = found;
         const handler = this.#handlers[action];
 
-        req.vparams = JSON.parse(payload);
+        req.vparams = JSON.parse(params);
         let result = handler(req, res, next);
         if (result.then) result = await result;
 
@@ -68,7 +68,7 @@ module.exports = class VString {
             .toLowerCase();
         const found = await this.#store.findById(_id);
         if (!found) return null;
-        const { expires, action, payload } = found;
+        const { expires, action, params } = found;
         if (expires < new Date()) {
             await deleteString(_id);
             return null;
