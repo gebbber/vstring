@@ -6,6 +6,7 @@ module.exports = class VString {
 
     constructor({ store }) {
         this.#store = store || require('./memory-store.js');
+        this.intercept = this.intercept.bind(this);
     }
 
     async newString({ action, ttl, ...rest }) {
@@ -51,7 +52,7 @@ module.exports = class VString {
         if (result.then) result = await result;
 
         const keepString = Boolean(result);
-        if (!keepString) await deleteString(_id);
+        if (!keepString) await this.deleteString(_id);
 
         return;
     }
