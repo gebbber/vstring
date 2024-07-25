@@ -1,6 +1,6 @@
 {
     "name": "vstring-express",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Simple Verification String Management for Express",
     "main": "./index.js",
     "respository": {
