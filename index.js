@@ -74,6 +74,6 @@ module.exports = class VString {
             return null;
         }
 
-        return { _id, action, payload };
+        return { _id, action, params };
     }
 };
